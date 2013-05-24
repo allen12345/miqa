@@ -1,0 +1,9 @@
+<div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+  <div id="right_recent_posts">
+    <?php print render($title_prefix); ?>    
+    <?php if ($block->subject) { print '<h3>'.$block->subject.'</h3>'; } ?>
+    <?php print render($title_suffix); ?>
+    <p><?php print $content; ?></p>
+    <?php //print '<pre>'. check_plain(print_r($block, 1)) .'</pre>'; ?>
+  </div>
+</div>

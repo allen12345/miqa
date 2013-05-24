@@ -1,0 +1,15 @@
+<div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+<div id="right_login">
+<div id="right_login_inn">
+<?php if ($block->subject): ?><h3><?php print $block->subject ?></h3><?php endif;?>
+<form action="" accept-charset="UTF-8" method="post">
+<input type="text" class="right_login_username" name="name" value="Username:" onfocus="if (this.value == 'Username:') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Username:';}" />
+<input type="password" class="right_login_username" name="pass" value="Password:" onfocus="if (this.value == 'Password:') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Password:';}" />
+<p><?php print t('Forgot your').' '.l(t('Login'),'user/login').' or '.l(t('password?'),'user/password').' '.l(t('Register!'),'user/register'); ?></p>
+<input type="hidden" name="form_token" id="edit-search-theme-form-form-token" value="<?php print drupal_get_token("user_login_form") ?>" />
+<input type="hidden" name="form_id" id="edit-search-theme-form" value="user_login_block" />
+<input type="submit" class="right_login_smb" name="op" value="Log in" />
+</form>
+</div>
+</div>
+</div>

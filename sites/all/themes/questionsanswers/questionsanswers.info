@@ -1,0 +1,32 @@
+name        = Questions and Answers 2
+description = Premium Drupal theme by <a href="http://www.themesnap.com">ThemeSnap.com</a>.
+screenshot  = screenshot.png
+version     = "7.0-1.0"
+core        = 7.x
+
+settings[skin] = 0
+settings[tm_value_0] = themesnap
+settings[tm_value_1] = 31408169@N04
+settings[tm_value_2] = 1
+settings[tm_value_3] = red
+settings[tm_value_4] = museo
+settings[tm_value_5] = 26
+settings[tm_value_6] = 0
+
+regions[sidebar_search] = Sidebar Search
+regions[sidebar_social] = Sidebar Social
+regions[content_top] = Content Top
+regions[content] = Content
+regions[sidebar_right_tabs] = Sidebar Right Tabs
+regions[sidebar_right] = Sidebar Right
+regions[footer_left] = Footer Left
+regions[footer_middle] = Footer Middle
+regions[footer_right] = Footer Right
+regions[footer_message] = Footer Message
+
+
+stylesheets[all][] = css/style.css
+
+scripts[] = js/tabs.js
+scripts[] = js/jquery.tweet.min.js
+scripts[] = js/main.js

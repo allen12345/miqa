@@ -1,0 +1,1 @@
+<?php print questionsanswers_user_tags('', '', TRUE); ?>

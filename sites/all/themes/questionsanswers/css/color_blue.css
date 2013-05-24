@@ -1,0 +1,300 @@
+body,
+.logo a,
+.blg-comments h2.title,
+.content-100 .name,
+.con-p .title
+{
+	color: #666;
+}
+body {
+  background-image: url(../img/body-bg-blue.png);
+	background-color: #e9e8de;
+}
+a,
+.blk .title,
+.content-25 .name
+{
+	color: #4175bc;
+}
+a:hover {
+	color: #111111;
+}
+.header .top ul.menu li a,
+.text-block-2,
+.mess,
+.con-t .title a,
+.comments h2.title,
+.i-best
+{
+	color: #457cc6;
+}
+.header .top ul.menu li a:hover {
+	color: #111111;
+}
+.soc a.soc1 {
+	background-image: url(../img/soc-6-a-blue.png);
+}
+.soc a.soc2 {
+	background-image: url(../img/soc-7-a-blue.png);
+}
+.soc a.soc3 {
+	background-image: url(../img/soc-1-a-blue.png);
+}
+.soc a.soc1:hover {
+	background-image: url(../img/soc-6-a.png);
+}
+.soc a.soc2:hover {
+	background-image: url(../img/soc-7-a.png);
+}
+.soc a.soc3:hover {
+	background-image: url(../img/soc-1-a.png);
+}
+.header .nav {
+	background-color: #3e70b1;
+	background-image: url(../img/bg-m-1-blue.png);
+}
+.header .nav .center a,
+.header .nav ul li a:hover,
+.header .nav ul ul li a,
+.header .nav ul ul li a:hover,
+.header .nav .search input[type="text"],
+.link-block-1 a,
+.con-t .count,
+.comments .comments-l ul.links a,
+.comments .comments-l ul.links a:hover,
+.form-actions input,
+.form-actions input:hover
+{
+	color: #FFF;
+}
+.header .nav .center a {
+	background-image: url(../img/button-bg-r.png);
+	border: 1px solid #cc0000;
+	text-shadow: #8a8a8a 1px 1px 1px;
+}
+.header .nav ul li a {
+	color: #a7c3e8;
+	border-right-color: #4c7ec1;
+	border-left-color: #3f71b4;
+}
+.header .nav ul li a:hover,
+.header .nav ul .expanded a:hover
+{
+	background-color: #325a8e;
+}
+.header .nav ul .expanded a {
+	background-image: url(../img/m-b-1.png);
+}
+.header .nav ul .expanded a:hover {
+	background-image: url(../img/m-b-2.png);
+}
+.header .nav ul li ul {
+	background-color: #94123a;
+}
+.header .nav .search {
+	background-image: url(../img/search.png);
+}
+.footer {
+	background-image: url(../img/bg-footer.png);
+}
+.footer .title,
+.con-q .con h1.title,
+.comment .con h3.title,
+.con-b h1.title,
+.con-b h3,
+.con-b h5,
+.con-b h6,
+.blg-comments h3.title,
+.con-b h4.title,
+.con-p .info .title
+{
+	color: #333;
+}
+.blk,
+.tab_menu_container ul li a.current,
+.tab-main_menu_container ul li a.current
+{
+	background-color: #fbfbfb;
+}
+.blk,
+.form-type-textfield input
+{
+	border: 1px solid #dedcc7;
+}
+
+.link-block-1 {
+	background-image: url(../img/bg-l-1-blue.png);
+	border: 1px solid #79b842;
+}
+.link-block-1 a {
+	background-image: url(../img/add-button.png);
+}
+.tab_menu_container ul li a,
+.con-1 .data,
+.con-2 .data,
+.tweets ul li,
+.tab-main_menu_container ul li a,
+.comment .con .text .rep span,
+.con-b .user,
+.bul-1,
+.bul-2,
+.bul-3,
+.bul-4,
+.content-100 .des
+{
+	color: #999;
+}
+.tab_menu_container ul li a.current,
+.tab-main_menu_container ul li a.current
+{
+	border-top-color: #dedcc7;
+	border-bottom-color: #dedcc7;
+	border-left-color: #dedcc7;
+	color: #ccc;
+}
+
+.con-t,
+.con-q,
+.con-q .user .data,
+.comment .user .data
+{
+	border-bottom-color: #e2e2e2;
+}
+.con-t .count {
+	background-image: url(../img/bg-count-t-blue.png);
+}
+.i-question {
+	background-image: url(../img/qestion.png);
+}
+
+.con-q .con .tags {
+	color: #ccc;
+}
+.comments .comments-l ul.links a {
+	background-image: url(../img/bg-button-comment-red.png);
+}
+.comment .con.odd {
+	background-color: #ecffe3;
+	border: 1px solid #c7e9b6;
+}
+.comment .con.even {
+	background-color: #f6f5ed;
+	border: 1px solid #eae8db;
+}
+.comment .con .text .rep {
+	border-top-color: #e1e1e1;
+}
+.comment .con.odd .st {
+	background-image: url(../img/comm-odd.png);
+}
+.comment .con.even .st {
+	background-image: url(../img/comm-even.png);
+}
+.con-b .text {
+	border-top-color: #eaf2f9;
+}
+.con-b h1,
+.con-b h2,
+.con-b h4,
+.content-25 .name sup,
+.last-l .tags_content_table a sup,
+.tags_content_table a sup,
+.users_content_table a sup
+{
+	color: #82c246;
+}
+
+
+hr {
+	border-bottom-color: #e9f1f8;
+}
+.bul-1 {
+	list-style-image: url(../img/bul-1.png);
+}
+.bul-2 {
+	list-style-image: url(../img/bul-3.png);
+}
+.bul-3 {
+	list-style-image: url(../img/bul-2.png);
+}
+.bul-4 {
+	list-style-image: url(../img/bul-4.png);
+}
+.con-b .red {
+	background-color: #ffcccc;
+}
+.con-b .green {
+	background-color: #e4f5c9;
+}
+
+
+.blg-comment {
+	border-bottom-color: #e9f1f8;
+}
+.con-bt {
+	border-bottom-color: #eaf2f9;
+}
+
+
+
+.user-st-1 {
+	background-image: url(../img/user-b-1.png);
+}
+.user-st-2 {
+	background-image: url(../img/user-b-2.png);
+}
+.user-st-3 {
+	background-image: url(../img/user-b-3.png);
+}
+
+.con-p .badges .stat {
+	background-image: url(../img/user-s-1.png);
+}
+.con-p .badges .stat4 {
+	background-image: url(../img/user-s-1.png);
+}
+.con-p .badges .stat5 {
+	background-image: url(../img/user-s-1.png);
+}
+.con-p .badges .stat6 {
+	background-image: url(../img/user-s-1.png);
+}
+.blk-u {
+	background-color: #FFF;
+	border: 1px solid #eaf2f9;
+}
+.defaultSkin .mceFirst .mceToolbar {
+  background-color: #f0f0ee;
+}
+.form-actions input {
+	background-color: #77b144;
+	background-image: url(../img/bg-button-comment-red.png);
+}
+
+.form-type-textfield input {
+  background-color: #fff;
+}
+.views-submit-button input {
+	background-image: url(../img/search-b.png);
+	background-color: transparent;
+}
+.rate-number-up-down-btn-up {
+  background: url(../img/up.png) no-repeat;
+}
+
+.rate-number-up-down-btn-down {
+  background: url(../img/down.png) no-repeat;
+}
+
+.rate-number-up-down-rating {
+  color: #99cc66;
+}
+
+.dtab ul.tabs a {
+  border: solid 1px #999;
+}
+.dtab ul.tabs a.active,
+.dtab ul.tabs a:hover 
+{
+border: solid 1px #999;
+}

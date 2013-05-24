@@ -1,0 +1,7 @@
+name = QuestionsAnswers helper
+description = "QuestionsAnswers helper"
+dependencies[] = comment
+dependencies[] = token
+core = 7.x
+
+

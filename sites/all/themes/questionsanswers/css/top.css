@@ -1,0 +1,10 @@
+.header {
+	background-color: #fff;
+	
+}
+.header .nav {
+  width: 100%;
+  -webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}

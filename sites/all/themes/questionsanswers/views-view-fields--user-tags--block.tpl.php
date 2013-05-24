@@ -1,0 +1,1 @@
+<?php questionsanswers_user_tags($fields['field_tags']->content, $fields['nid']->content); ?>

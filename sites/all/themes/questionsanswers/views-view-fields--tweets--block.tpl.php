@@ -1,0 +1,1 @@
+<?php print '<strong><small>'.$fields['created_time']->content.'</small></strong><br /><span class="twitt_cont">'.$fields['text']->content.'</span>'; ?>

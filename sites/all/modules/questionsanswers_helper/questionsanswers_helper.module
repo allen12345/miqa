@@ -1,0 +1,548 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function questionsanswers_helper_menu() {
+  $menu = array();
+  
+  $menu['node/%/bestanswer/%'] = array(
+    'title' => 'Best Answer',
+    'page callback' => 'questionsanswers_helper_node_save_bestanswer',
+    'page arguments' => array(1, 3),
+    'access arguments' => array('access content'),
+    //'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $menu;
+}
+
+function questionsanswers_helper_node_save_bestanswer($nid, $cid) {
+//drupal_set_message('acc_node_update <pre>'. check_plain($nid .' - '. $cid) .'</pre>');
+  global $user;
+  $node = node_load($nid);
+  if ($user->uid and $node->uid and $user->uid == $node->uid and is_numeric($cid)) {
+    db_delete('questionsanswers_node')->condition('nid', $nid, '=')->execute();
+    $query = db_insert('questionsanswers_node')->fields(array('nid', 'cid'));
+    $query->values(array('nid' => $nid, 'cid' => $cid));
+    $query->execute();
+  }
+  drupal_goto('node/'.$nid);
+}
+
+function questionsanswers_helper_node_load_bestanswer($nid) {
+//drupal_set_message('acc_node_update <pre>'. check_plain($nid .' - '. $cid) .'</pre>');
+  $cid = 0;
+  if ($nid) {
+    $cid = db_select('questionsanswers_node')->fields('questionsanswers_node', array('cid'))->condition('nid', $nid, '=')->execute()->fetchCol();
+    if (is_array($cid) and count($cid)) {
+      $cid = $cid[0];
+    } else {
+      $cid = 0;
+    }
+  }
+  return $cid;
+}
+
+function questionsanswers_helper_user_save_cahe($account) {
+
+}
+
+function questionsanswers_helper_user_view($account) {
+  $account->content['user_badges'] = array(
+    '#markup' => questionsanswers_helper_user_badges($account),
+    '#weight' => 10,
+  );
+  $r = '';
+  $v = '';
+  foreach ($account->roles as $ri => $vi) {
+    if($ri == 4 or $ri == 5 or $ri == 6) {
+      $r = $ri;
+      $v = $vi;
+    }
+  }
+  $account->content['user_level_id'] = array(
+    '#markup' => $r,
+    '#weight' => 10,
+  );
+  $account->content['user_level_name'] = array(
+    '#markup' => $v,
+    '#weight' => 10,
+  );
+}
+
+function questionsanswers_helper_user_badges($account) {
+  global $base_url; 
+  //drupal_set_message('<pre>'. check_plain(print_r($account, 1)) .'</pre>');
+  $out = '';
+  
+  if (isset($account->data['status_qa']['node_nids']) and count($account->data['status_qa']['node_nids'])) {
+    $nids = $account->data['status_qa']['node_nids'];
+  } else {
+    $n = db_select('node', 'n');
+    $n->fields('n', array('nid'));
+    $n->condition('type', 'question');
+    $n->condition('status', 1);
+    $n->condition('uid', $account->uid);
+    $nids = $n->execute()->fetchCol();
+  }
+  if (isset($account->data['status_qa']['node_sids']) and count($account->data['status_qa']['node_sids'])) {
+    $sids = $account->data['status_qa']['node_sids'];
+  } else {
+    $n = db_select('comment', 'n');
+    $n->fields('n', array('cid'));
+    $n->condition('status', 1);
+    $n->condition('uid', $account->uid);
+    $sids = $n->execute()->fetchCol();
+  }
+  
+  //drupal_set_message('<pre>'. check_plain(print_r($nids, 1)) .'</pre>');
+  $count_node_vote = 0;
+  if (count($nids)) {
+    if (isset($account->data['status_qa']['count_node_votes'])) {
+      $count_node_vote = $account->data['status_qa']['count_node_votes'];
+    } else {
+      $n = db_select('votingapi_cache', 'n');
+      $n->fields('n', array('value'));
+      $n->condition('n.entity_type', 'node');
+      $n->condition('n.entity_id', $nids, 'IN');
+      $n->condition('n.function', 'sum');
+      $n->orderBy('n.value', 'DESC');
+      $n->range(0, 1);
+      $count_node_vote = $n->execute()->fetchCol();
+      if (isset($count_node_vote[0])) {
+        $count_node_vote = $count_node_vote[0];
+      } else {
+        $count_node_vote = 0;
+      }
+    /*
+    $n = db_select('votingapi_vote', 'n');
+    $n->condition('n.entity_type', 'node');
+    $n->condition('n.value', 1);
+    $n->condition('n.entity_id', $nids, 'IN');
+    $n->addExpression('COUNT(n.vote_id)');
+    $count_node_vote = (int)$n->execute()->fetchField();
+    */
+   }
+  }
+  
+  if ($count_node_vote >= 5) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-3.png" width="36" height="36" alt="'.t('Great Question').'" title="'.t('Great Question').'" />';
+  } elseif ($count_node_vote >= 3) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-2.png" width="36" height="36" alt="'.t('Good Question').'" title="'.t('Good Question').'" />';
+  } elseif ($count_node_vote >= 1) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-1.png" width="36" height="36" alt="'.t('Nice Question').'" title="'.t('Nice Question').'" />';
+  } 
+  
+  if (isset($account->data['status_qa']['disciplined']) and $account->data['status_qa']['disciplined']) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-4.png" width="36" height="36" alt="'.t('Disciplined').'" title="'.t('Disciplined').'" />';
+  }
+    
+  if (count($nids)) {
+    $n = db_select('node_counter', 'n');
+    $n->fields('n', array('totalcount'));
+    $n->condition('n.nid', $nids, 'IN');
+    $n->orderBy('totalcount', 'DESC');
+    $n->range(0, 1);
+    $count_view = $n->execute()->fetchCol();
+  
+    if (isset($count_view[0])) $count_view = $count_view[0]; else $count_view = 0;
+
+    if ($count_view >= 500) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-7.png" width="36" height="36" alt="'.t('Famous Question').'" title="'.t('Famous Question').'" />';
+    } elseif ($count_view >= 300) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-6.png" width="36" height="36" alt="'.t('Notable Question').'" title="'.t('Notable Question').'" />';
+    } elseif ($count_view >= 200) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-5.png" width="36" height="36" alt="'.t('Popular Question').'" title="'.t('Popular Question').'" />';
+    } 
+  }
+
+  if (isset($account->data['status_qa']['node_edit']) and is_numeric($account->data['status_qa']['node_edit']) and $account->data['status_qa']['node_edit'] >= 10) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-8.png" width="36" height="36" alt="'.t('Strunk & White').'" title="'.t('Strunk & White').'" />';
+  }
+  
+  $count_comment_vote = 0;
+  if (count($sids)) {
+    if (isset($account->data['status_qa']['count_comment_votes'])) {
+      $count_node_vote = $account->data['status_qa']['count_comment_votes'];
+    } else {
+      $n = db_select('votingapi_cache', 'n');
+      $n->fields('n', array('value'));
+      $n->condition('n.entity_type', 'comment');
+      $n->condition('n.entity_id', $sids, 'IN');
+      $n->condition('n.function', 'sum');
+      $n->orderBy('n.value', 'DESC');
+      $n->range(0, 1);
+      $count_comment_vote = $n->execute()->fetchCol();
+      if (isset($count_comment_vote[0])) {
+        $count_comment_vote = $count_comment_vote[0];
+      } else {
+        $count_comment_vote = 0;
+      }
+    /*
+    $n = db_select('votingapi_vote', 'n');
+    $n->condition('n.entity_type', 'comment');
+    $n->condition('n.value', 1);
+    $n->condition('n.entity_id', $sids, 'IN');
+    $n->addExpression('COUNT(n.vote_id)');
+    $count_comment_vote = (int)$n->execute()->fetchField();
+    */
+   }
+  
+    if ($count_comment_vote >= 5) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-11.png" width="36" height="36" alt="'.t('Great Answer').'" title="'.t('Great Answer').'" />';
+    } elseif ($count_comment_vote >= 3) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-10.png" width="36" height="36" alt="'.t('Good Answer').'" title="'.t('Good Answer').'" />';
+    } elseif ($count_comment_vote >= 1) {
+      $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-9.png" width="36" height="36" alt="'.t('Nice Answer').'" title="'.t('Nice Answer').'" />';
+    } 
+  }
+
+  $n = db_select('votingapi_vote', 'n');
+  $n->fields('n', array('value'));
+  $n->condition('n.entity_type', 'comment');
+  $n->condition('n.value', -1);
+  $n->condition('uid', $account->uid);
+  $n->range(0, 1);
+  $critic = $n->execute()->fetchCol();
+  if (isset($critic[0])) $critic = 1; else $critic = 0;
+  if ($critic) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-12.png" width="36" height="36" alt="'.t('Critic').'" title="'.t('Critic').'" />';
+  }  
+
+  $n = db_select('votingapi_vote', 'n');
+  $n->fields('n', array('value'));
+  $n->condition('n.entity_type', 'comment');
+  $n->condition('n.value', 1);
+  $n->condition('uid', $account->uid);
+  $n->range(0, 1);
+  $supporter = $n->execute()->fetchCol();
+  if (isset($supporter[0])) $supporter = 1; else $supporter = 0;
+  if ($supporter) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-14.png" width="36" height="36" alt="'.t('Supporter').'" title="'.t('Supporter').'" />';
+  }  
+
+  if (isset($account->data['status_qa']['node_edit']) and is_numeric($account->data['status_qa']['node_edit']) and $account->data['status_qa']['node_edit'] >= 1) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-15.png" width="36" height="36" alt="'.t('Editor').'" title="'.t('Editor').'" />';
+  }
+  
+  $n = db_select('votingapi_vote', 'n');
+  //$n->condition('n.entity_type', 'comment');
+  //$n->condition('n.value', 1);
+  $n->condition('uid', $account->uid);
+  $n->addExpression('COUNT(n.vote_id)');
+  $count_votes = (int)$n->execute()->fetchField();
+
+  if ($count_votes >= 15) {
+    $out .= '<img src="'.$base_url.'/'.drupal_get_path('theme','questionsanswers').'/img/badge-16.png" width="36" height="36" alt="'.t('Civic Duty').'" title="'.t('Civic Duty').'" />';
+  }  
+  //drupal_set_message('<pre>'. check_plain(print_r($count_comment_vote, 1)) .'</pre>');
+  return $out;
+}
+
+
+function questionsanswers_helper_user_level_img($uid) {
+  $acc = questionsanswers_helper_userload($uid);
+  $r = '';
+  $v = '';
+  foreach ($acc->roles as $ri => $vi) {
+    if($ri == 4 or $ri == 5 or $ri == 6) {
+      $r = $ri;
+      $v = $vi;
+    }
+  }
+  if ($r) {
+    if ($r == 4) return '<div class="user-st-3"></div>';
+    if ($r == 5) return '<div class="user-st-2"></div>';
+    if ($r == 6) return '<div class="user-st-1"></div>';
+  }
+  //drupal_set_message('<pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+}
+
+function questionsanswers_helper_user_questions($uid) {
+  $acc = questionsanswers_helper_userload($uid);
+  if (isset($acc->data['status_qa']['questions'])) {
+    $count = $acc->data['status_qa']['questions'];
+  } else {
+    $n = db_select('node', 'n');
+    $n->condition('type', 'question');
+    $n->condition('status', 1);
+    $n->condition('uid', $uid);
+    $n->addExpression('COUNT(n.nid)');
+    $count = (int)$n->execute()->fetchField();
+  }
+  $count = format_plural($count, '1 question', '@count questions');
+  return $count;
+}
+
+function questionsanswers_helper_user_answers($uid) {
+  $acc = questionsanswers_helper_userload($uid);
+  if (isset($acc->data['status_qa']['answers'])) {
+    $count = $acc->data['status_qa']['answers'];
+  } else {
+    $n = db_select('comment', 'c');
+    $n->leftJoin('node', 'n', 'c.nid = n.nid');
+    $n->condition('n.type', 'question');
+    $n->condition('c.status', 1);
+    $n->condition('n.status', 1);
+    $n->condition('c.uid', $uid);
+    $n->addExpression('COUNT(c.cid)');
+    $count = (int)$n->execute()->fetchField();
+  }
+  $count = format_plural($count, '1 answer', '@count answers');
+  return $count;
+}
+
+function questionsanswers_helper_user_tags($uid) {
+  $acc = questionsanswers_helper_userload($uid);
+  if (isset($acc->data['status_qa']['tags'])) {
+    $count = $acc->data['status_qa']['tags'];
+  } else {
+    $n = db_select('node', 'n');
+    $n->fields('n', array('nid'));
+    $n->condition('type', 'question');
+    $n->condition('status', 1);
+    $n->condition('uid', $uid);
+    $nids = $n->execute()->fetchCol();
+    if (count($nids)) {
+      $n = db_select('taxonomy_index', 'n');
+      $n->condition('n.nid', $nids, 'IN');
+      $n->addExpression('COUNT(n.tid)');
+      $count = (int)$n->execute()->fetchField();
+    } else {
+      $count = 0;
+    }
+  }
+  $count = format_plural($count, '1 tag', '@count tags');
+  return $count;
+}
+
+function questionsanswers_helper_userload($uid) {
+  static $aacc = array();
+  if (empty($aacc[$uid])) $aacc[$uid] = user_load($uid);
+  return $aacc[$uid];
+}
+
+
+function questionsanswers_helper_node_delete($node) {
+  //drupal_set_message('node_delete <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+  if ($node->type = 'question') {
+    $acc = user_load($node->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_delete <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (!(isset($acc->data['status_qa']['disciplined']) and $acc->data['status_qa']['disciplined'])) {
+        if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+        $n = db_select('votingapi_vote', 'n');
+        $n->condition('n.entity_type', 'node');
+        $n->condition('n.entity_id', $node->nid);
+        $n->addExpression('SUM(n.value)');
+        $vote = (int)$n->execute()->fetchField();
+        //drupal_set_message('vote <pre>'. check_plain(print_r($vote, 1)) .'</pre>');
+        if ($vote >= 3) {
+          $data['data']['status_qa']['disciplined'] = 1;
+        } else {
+          $data['data']['status_qa']['disciplined'] = 0;
+        }
+        //$fid = $acc->picture;
+        //unset($acc->picture);
+        //$acc->picture->fid = $fid;
+        user_save($acc, $data) ;
+      }
+    }
+  }  
+  questionsanswers_helper_node_insert($node);
+}
+
+function questionsanswers_helper_node_insert($node) {
+  //drupal_set_message('node_insert <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+  if ($node->type = 'question') {
+    $acc = user_load($node->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+      $n = db_select('node', 'n');
+      $n->fields('n', array('nid'));
+      $n->condition('type', 'question');
+      $n->condition('status', 1);
+      $n->condition('uid', $acc->uid);
+      $nids = $n->execute()->fetchCol();
+      if (count($nids)) {
+        $n = db_select('taxonomy_index', 'n');
+        $n->condition('n.nid', $nids, 'IN');
+        $n->addExpression('COUNT(n.tid)');
+        $data['data']['status_qa']['tags'] = (int)$n->execute()->fetchField();
+        $data['data']['status_qa']['node_nids'] = $nids;
+        $data['data']['status_qa']['questions'] = count($nids);
+      } else {
+        $data['data']['status_qa']['node_nids'] = array();
+        $data['data']['status_qa']['questions'] = 0;
+        $data['data']['status_qa']['tags'] = 0;
+      }
+  
+      //$fid = $acc->picture;
+      //unset($acc->picture);
+      //$acc->picture->fid = $fid;
+      user_save($acc, $data) ;
+    }
+  }
+}
+
+function questionsanswers_helper_node_update($node) {
+  //drupal_set_message('node_update <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+  if ($node->type = 'question') {
+    $acc = user_load($node->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+      if (isset($acc->data['status_qa']['node_edit'])) {
+        $data['data']['status_qa']['node_edit'] = $acc->data['status_qa']['node_edit'] + 1;
+      } else {
+        $data['data']['status_qa']['node_edit'] = 1;
+      }
+      //drupal_set_message('node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      //$fid = $acc->picture;
+      //unset($acc->picture);
+      //$acc->picture->fid = $fid;
+      user_save($acc, $data) ;
+    }
+  }
+}
+
+/*
+function questionsanswers_helper_node_submit($node, $form, &$form_state) {
+  //drupal_set_message('node_submit <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+}
+*/
+
+function questionsanswers_helper_comment_insert($comment) {
+  //drupal_set_message('comment_insert <pre>'. check_plain(print_r($comment, 1)) .'</pre>');
+  if ($node->type = 'question') {
+    $acc = user_load($comment->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+      $n = db_select('comment', 'n');
+      $n->fields('n', array('cid'));
+      $n->condition('status', 1);
+      $n->condition('uid', $acc->uid);
+      $sids = $n->execute()->fetchCol();
+      if (count($sids)) {
+        $data['data']['status_qa']['node_sids'] = $sids;
+        $data['data']['status_qa']['answers'] = count($sids);
+      } else {
+        $data['data']['status_qa']['node_sids'] = array();
+        $data['data']['status_qa']['answers'] = 0;
+      }
+      //$fid = $acc->picture;
+      //unset($acc->picture);
+      //$acc->picture->fid = $fid;
+      user_save($acc, $data) ;
+    }
+  }
+}
+
+function questionsanswers_helper_comment_publish($comment) {
+  questionsanswers_helper_comment_insert($comment);
+}
+
+function questionsanswers_helper_comment_unpublish($comment) {
+  questionsanswers_helper_comment_insert($comment);
+}
+
+function questionsanswers_helper_comment_delete($comment) {
+  questionsanswers_helper_comment_insert($comment);
+}
+
+/*
+function questionsanswers_helper_comment_update($comment) {
+  drupal_set_message('comment_update <pre>'. check_plain(print_r($comment, 1)) .'</pre>');
+}
+*/
+
+/*
+function questionsanswers_helper_votingapi_storage_add_vote(&$vote) {
+  drupal_set_message('add_vote <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+}
+
+function questionsanswers_helper_votingapi_storage_delete_votes($votes, $vids) {
+  drupal_set_message('delete_votes <pre>'. check_plain(print_r($node, 1)) .'</pre>');
+}
+*/
+
+function questionsanswers_helper_rate_vote_alter($vote, $context) {
+  //drupal_set_message('rate_vote_alter <pre>'. check_plain(print_r($vote, 1)) .'</pre>');
+  if ($vote['entity_type'] == 'node') {
+    $node = node_load($vote['entity_id']);
+    $acc = questionsanswers_helper_userload($node->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+      if (isset($acc->data['status_qa']['node_nids']) and count($acc->data['status_qa']['node_nids'])) {
+        $nids = $acc->data['status_qa']['node_nids'];
+      } else {
+        $n = db_select('node', 'n');
+        $n->fields('n', array('nid'));
+        $n->condition('type', 'question');
+        $n->condition('status', 1);
+        $n->condition('uid', $acc->uid);
+        $nids = $n->execute()->fetchCol();
+      }
+      if (count($nids)) {
+        $n = db_select('votingapi_cache', 'n');
+        $n->fields('n', array('value'));
+        $n->condition('n.entity_type', 'node');
+        $n->condition('n.entity_id', $nids, 'IN');
+        $n->condition('n.function', 'sum');
+        $n->orderBy('n.value', 'DESC');
+        $n->range(0, 1);
+        $count_node_vote = $n->execute()->fetchCol();
+        if (isset($count_node_vote[0])) {
+          $data['data']['status_qa']['count_node_votes'] = $count_node_vote[0];
+        } else {
+          $data['data']['status_qa']['count_node_votes'] = 0;
+        }
+        //$fid = $acc->picture;
+        //unset($acc->picture);
+        //$acc->picture->fid = $fid;
+        user_save($acc, $data) ;
+      }
+    }
+  } else {
+    $comment = comment_load($vote['entity_id']);
+    $acc = questionsanswers_helper_userload($comment->uid);
+    if ($acc->uid) {
+      //drupal_set_message('acc_node_update <pre>'. check_plain(print_r($acc, 1)) .'</pre>');
+      if (isset($acc->data['status_qa'])) $data['data']['status_qa'] = $acc->data['status_qa'];
+      if (isset($acc->data['status_qa']['node_sids']) and count($acc->data['status_qa']['node_sids'])) {
+        $sids = $acc->data['status_qa']['node_sids'];
+      } else {
+        $n = db_select('comment', 'n');
+        $n->fields('n', array('cid'));
+        $n->condition('status', 1);
+        $n->condition('uid', $acc->uid);
+        $sids = $n->execute()->fetchCol();
+      }
+      if (count($sids)) {
+        $n = db_select('votingapi_cache', 'n');
+        $n->fields('n', array('value'));
+        $n->condition('n.entity_type', 'comment');
+        $n->condition('n.entity_id', $sids, 'IN');
+        $n->condition('n.function', 'sum');
+        $n->orderBy('n.value', 'DESC');
+        $n->range(0, 1);
+        $count_comment_vote = $n->execute()->fetchCol();
+        if (isset($count_comment_vote[0])) {
+          $data['data']['status_qa']['count_comment_votes'] = $count_comment_vote[0];
+        } else {
+          $data['data']['status_qa']['count_comment_votes'] = 0;
+        }
+        //$fid = $acc->picture;
+        //unset($acc->picture);
+        //$acc->picture->fid = $fid;
+        user_save($acc, $data) ;
+      }
+    }
+  }
+}
+
