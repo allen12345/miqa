@@ -1,11 +1,15 @@
-@import url(http://fonts.googleapis.com/css?family=Fredoka+One);
+<!--@import url(http://fonts.googleapis.com/css?family=Fredoka+One);-->
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+
+
+
 body {
 	font-size: 14px;
 	color: #666;
 	background-color: #fffbe8;
 	margin: 0px;
 	padding: 0px;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 a {
 	color: #4175bc;
@@ -214,7 +218,7 @@ a:hover {
 	border-left-style: solid;
 	border-left-color: #bc1649;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 	text-shadow: #333 1px 1px 1px;
 }
 .header .nav ul li.first a {
@@ -341,7 +345,7 @@ a:hover {
 	color: #333;
 	margin-bottom: 15px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .footer .menu {
 	list-style-image: none;
@@ -395,7 +399,7 @@ a:hover {
 	color: #d01851;
 	text-align: center;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .link-block-1 {
 	background-image: url(../img/bg-l-1-red.png);
@@ -417,7 +421,7 @@ a:hover {
 	padding-bottom: 9px;
 	padding-left: 13px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 	text-shadow: #666 1px 1px 1px;
 }
 div.tabs {
@@ -444,7 +448,7 @@ div.tabs {
 .tab_menu_container ul li {
 	float: left;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .tab_menu_container ul li a {
 	text-decoration: underline;
@@ -519,7 +523,7 @@ div.tabs {
 	color: #4175bc;
 	margin-bottom: 15px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .tweets ul {
 	margin: 0px;
@@ -558,7 +562,7 @@ div.tabs-main {
 .tab-main_menu_container ul li {
 	float: left;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .tab-main_menu_container ul li a {
 	text-decoration: underline;
@@ -597,7 +601,7 @@ div.tabs-main {
 	margin-top: 15px;
 	margin-bottom: 34px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-t {
 	border-bottom-width: 1px;
@@ -619,7 +623,7 @@ div.tabs-main {
 	margin-right: 10px;
 	padding-top: 10px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 	text-shadow: #666 1px 1px 1px;
 }
 .con-t .count span {
@@ -632,7 +636,7 @@ div.tabs-main {
 	font-size: 18px;
 	margin-bottom: 10px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-t .title a {
 	color: #d01851;
@@ -712,7 +716,7 @@ margin-right: 10px;
 	margin-bottom: 15px;
 	margin-left: 0px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-q .con .tags {
 	font-size: 12px;
@@ -746,7 +750,7 @@ padding: 0;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 		font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 	text-shadow: #666 1px 1px 1px;
 }
 .comments .comments-l ul.links a:hover {
@@ -765,7 +769,7 @@ padding: 0;
 	color: #D01851;
 	margin-left: 130px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .comment .user {
 	margin-bottom: 15px;
@@ -823,7 +827,7 @@ padding: 0;
 	margin-bottom: 10px;
 	margin-left: 0px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .comment .con .text {
 	line-height: 20px;
@@ -851,7 +855,7 @@ padding: 0;
 	font-size: 14px;
 	line-height: 14px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .comment .user img {
 	margin-right: 10px;
@@ -888,7 +892,7 @@ padding: 0;
 	margin-bottom: 7px;
 	margin-left: 0px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-b .user {
 	color: #999;
@@ -1019,7 +1023,7 @@ hr {
 	margin-top: 0px;
 	margin-bottom: 5px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .blg-comments h2.title {
 	font-size: 12px;
@@ -1028,7 +1032,7 @@ hr {
 	margin-top: 0px;
 	margin-bottom: 10px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .blg-comment {
 	font-size: 12px;
@@ -1084,7 +1088,7 @@ hr {
 	margin: 0px;
 	padding: 0px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-bt img {
 	float: left;
@@ -1130,7 +1134,7 @@ hr {
 .con-b h4.title {
 	color: #333;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .content-100 {
 	margin-top: 7px;
@@ -1219,7 +1223,7 @@ hr {
 	color: #333;
 	margin: 0px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-p dl {
 	font-size: 12px;
@@ -1306,7 +1310,7 @@ hr {
 .con-p .title {
 	color: #666;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 }
 .con-p .last-l a {
 	font-size: 12px;
@@ -1343,7 +1347,7 @@ padding: 10px 10px 10px 10px;
 	border: none;
 	margin-right: 10px;
 	font-weight: normal;
-	font-family: 'Fredoka One', cursive, Helvetica, Arial, sans-serif;
+	font-family: 'Droid Serif',serif;
 	text-shadow: #666 1px 1px 1px;
 	cursor: pointer;
 }
